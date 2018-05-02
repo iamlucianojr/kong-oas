@@ -1,0 +1,107 @@
+swagger: '2.0'
+info:
+  version: 1.1.1
+  description: A Swagger definition for the Kong OAuth Plugin API on the public endpoint
+  title: Kong-OAuth
+basePath: /your-api-goes-here
+consumes:
+  - application/x-www-form-urlencoded
+produces:
+  - application/json
+schemes:
+  - https
+paths:
+  /oauth2/authorize:
+    post:
+      operationId: authorize
+      tags:
+        - auth
+      parameters:
+        - name: client_id
+          required: true
+          type: string
+          in: formData
+        - name: scope
+          type: string
+          in: formData
+          required: false
+        - name: authenticated_userid
+          type: string
+          in: formData
+          required: false
+        - name: provision_key
+          type: string
+          in: formData
+          required: false
+        - name: response_type
+          type: string
+          in: formData
+          required: false
+      responses:
+        '200':
+          description: The authCode was created
+          schema:
+            type: object
+  /oauth2/token:
+    post:
+      operationId: token
+      tags:
+        - auth
+      parameters:
+        - name: grant_type
+          required: true
+          type: string
+          in: formData
+        - name: client_id
+          required: true
+          type: string
+          in: formData
+        - name: client_secret
+          type: string
+          in: formData
+          required: false
+        - name: scope
+          type: string
+          in: formData
+          required: false
+        - name: provision_key
+          type: string
+          in: formData
+          required: false
+        - name: authenticated_userid
+          type: string
+          in: formData
+          required: false
+        - name: refresh_token
+          type: string
+          in: formData
+          required: false
+        - name: auth_context_id
+          type: string
+          in: formData
+          required: false
+        - name: code
+          type: string
+          in: formData
+          required: false
+        - name: redirect_uri
+          type: string
+          in: formData
+          required: false
+      responses:
+        '200':
+          description: The token was created
+          schema:
+            $ref: '#/definitions/TokenInfo'
+definitions:
+  TokenInfo:
+    type: object
+    properties:
+      expires:
+        type: number
+      refresh_token:
+        type: string
+      token_type:
+        type: string
+      access_token:
+        type: string
